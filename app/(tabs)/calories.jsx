@@ -24,7 +24,7 @@ export default function Calories() {
         marginTop: 8,
         width: '80%',
         alignItems: 'center',
-        backgroundColor: Colors.LIGHTGRAY,
+        backgroundColor: Colors.WHITE,
         borderColor: Colors.GRAY,
         borderWidth: 1,
         borderRadius: 30,
@@ -69,6 +69,7 @@ export default function Calories() {
           <View style={styles.mealImagePlaceholder} />
           <View>
             <Text style={styles.mealName}>Cream Soup</Text>
+            <Text style={styles.mealTime}>19:23 29/09/2024</Text>
             <Text style={styles.mealCalories}>430 cal</Text>
           </View>
         </TouchableOpacity>
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: Colors.ORANGE,
+    fontFamily: "outfit",
   },
   container: {
     flex: 1,
