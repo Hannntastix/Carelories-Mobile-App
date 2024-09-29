@@ -19,21 +19,6 @@ export default function Calories() {
         </TouchableOpacity>
         {/* Foto profil pengguna bisa ditempatkan di sini */}
       </View>
-      <TouchableOpacity style={{
-        padding: 10,
-        marginTop: 8,
-        width: '80%',
-        alignItems: 'center',
-        backgroundColor: Colors.WHITE,
-        borderColor: Colors.GRAY,
-        borderWidth: 1,
-        borderRadius: 30,
-        marginHorizontal: 'auto',
-        color: Colors.ORANGE,
-      }}>
-        Choose Your Calories Target To Be Displayed
-        <Ionicons name="arrow-down" size={20} color={Colors.ORANGE} />
-      </TouchableOpacity>
       {/* Ringkasan Kalori */}
       < View style={styles.caloriesSummary} >
         {/* Grafik atau ilustrasi ringkasan kalori bisa ditempatkan di sini */}

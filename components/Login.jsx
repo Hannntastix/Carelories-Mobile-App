@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { Colors } from '@/constants/Colors'
 import { useRouter } from 'expo-router'
@@ -8,7 +8,7 @@ export default function Login() {
     const router = useRouter();
 
     return (
-        <View>
+        <ScrollView style={styles.mainContainer}>
             <Image source={require('./../assets/images/login.jpeg')}
                 style={{
                     width: '100%',
@@ -49,16 +49,20 @@ export default function Login() {
                     }}>Get Started</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </ScrollView>
 
     )
 }
 
 const styles = StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        backgroundColor: Colors.WHITE,
+      },
     container: {
         backgroundColor: Colors.WHITE,
         marginTop: -20,
-        height: '100%',
+        height: 'auto',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
         padding: 25,
@@ -75,6 +79,7 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: Colors.ORANGE,
         borderRadius: 99,
-        margin: '20%',
+        marginVertical: '10%',
+        marginHorizontal: '20%',
     }
 })

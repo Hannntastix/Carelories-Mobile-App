@@ -95,7 +95,7 @@ const HomeScreen = () => {
             <Text style={{
               color: '#fff',
               fontSize: 15,
-              marginLeft: 14,
+              marginHorizontal: "auto",
               marginVertical: "auto",
               fontFamily: "outfit",
             }}>USE</Text>
@@ -124,7 +124,7 @@ const HomeScreen = () => {
             <Text style={{
               color: '#fff',
               fontSize: 15,
-              marginLeft: 14,
+              marginHorizontal: "auto",
               marginVertical: "auto",
               fontFamily: "outfit",
             }}>USE</Text>
