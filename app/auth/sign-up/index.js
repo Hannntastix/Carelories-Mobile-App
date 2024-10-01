@@ -32,24 +32,31 @@ export default function SignUp() {
     }, [])
 
     const onCreateAccount = () => {
-
-        if(!email&&!password&&!fullName) {
+        if (!email || !password || !fullName) {
             ToastAndroid.show("Please complete all details", ToastAndroid.LONG);
-            return ;
+            return;
         }
 
         createUserWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                // Signed up 
                 const user = userCredential.user;
-                router.replace('/home')
-                // ...
+
+                // Menyimpan fullName ke Firestore
+                setDoc(doc(db, "users", user.uid), {
+                    fullName: fullName,
+                    email: email
+                }).then(() => {
+                    console.log("User data saved successfully");
+                    router.replace('/home');
+                }).catch((error) => {
+                    console.error("Error saving user data: ", error);
+                });
             })
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
                 console.log(errorMessage, errorCode);
-                // ..
+                ToastAndroid.show(errorMessage, ToastAndroid.LONG);
             });
     }
 
@@ -123,7 +130,7 @@ export default function SignUp() {
 
             {/* Create Account Button */}
             <TouchableOpacity
-            onPress={onCreateAccount}
+                onPress={onCreateAccount}
                 style={{
                     padding: 15,
                     backgroundColor: Colors.PRIMARY,

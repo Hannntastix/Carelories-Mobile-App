@@ -37,7 +37,7 @@ export default function Calories() {
         <TouchableOpacity style={styles.mealItem}>
           <View style={styles.mealImagePlaceholder} />
           <View>
-            <Text style={styles.mealName}>Nasi Uduk</Text>
+            <Text style={styles.mealName}>Fried Rice</Text>
             <Text style={styles.mealTime}>08:53 29/09/2024</Text>
             <Text style={styles.mealCalories}>220 cal</Text>
           </View>
@@ -45,7 +45,7 @@ export default function Calories() {
         <TouchableOpacity style={styles.mealItem}>
           <View style={styles.mealImagePlaceholder} />
           <View>
-            <Text style={styles.mealName}>Nasi Padang</Text>
+            <Text style={styles.mealName}>Carbonara</Text>
             <Text style={styles.mealTime}>13:34 29/09/2024</Text>
             <Text style={styles.mealCalories}>550 cal</Text>
           </View>
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: Colors.WHITE,
+    backgroundColor: Colors.LIGHTGRAY,
   },
   caloriesSummary: {
     backgroundColor: Colors.ORANGE,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   section: {
-    backgroundColor: Colors.LIGHTGRAY,
+    backgroundColor: Colors.WHITE,
     margin: 15,
     padding: 20,
     borderRadius: 15,
