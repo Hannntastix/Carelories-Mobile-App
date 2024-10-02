@@ -19,7 +19,7 @@ export default function TabLayout() {
       <Tabs.Screen name='calories'
         options={{
           tabBarIcon: ({ color }) => <Ionicons name="pie-chart-outline" size={24} color={color} />,
-          tabBarLabel:"Calories Data"
+          tabBarLabel:"Calorie Data"
         }}
       />
       <Tabs.Screen name='profile'

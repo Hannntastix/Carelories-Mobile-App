@@ -2,38 +2,47 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'rea
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react'
 import { Colors } from '../../constants/Colors';
+import { useTarget } from '../TargetContext';
+import StartNewTargetCard from '../../components/MyTarget/StartNewTargetCard';
+import { useState } from 'react';
 
 export default function Calories() {
+  const { getActiveTarget } = useTarget();
+  const activeTarget = getActiveTarget() || {};
+
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>Carelories</Text>
         <TouchableOpacity>
-        <Image source={require('./../../assets/images/login.jpeg')}
-                style={{
-                    width: 50,
-                    height: 30,
-                }}
-            />
+          <Image source={require('./../../assets/images/login.jpeg')}
+            style={{
+              width: 50,
+              height: 30,
+            }}
+          />
         </TouchableOpacity>
         {/* Foto profil pengguna bisa ditempatkan di sini */}
       </View>
+
       {/* Ringkasan Kalori */}
-      < View style={styles.caloriesSummary} >
-        {/* Grafik atau ilustrasi ringkasan kalori bisa ditempatkan di sini */}
-        < Text style={styles.summaryTitle} > Today's Calories</Text>
-        < Text style={styles.summaryNumber} > 1,200 / 2,000</Text >
+      <View style={styles.caloriesSummary}>
+        <Text style={styles.summaryTitle}>Today's Calories</Text>
+        {activeTarget.daily ? (
+          <Text style={styles.summaryNumber}>1,200 / {activeTarget.daily}</Text>
+        ) : (
+          <Text style={styles.summaryNumber}>-</Text>
+        )}
         <View style={styles.progressBar}>
           <View style={[styles.progress, { width: '60%' }]} />
         </View>
-        < Text style={styles.summaryTitle} >Progress : 60%</Text>
-      </View >
+        <Text style={styles.summaryTitle}>Progress : 60%</Text>
+      </View>
 
       {/* Makanan Hari Ini */}
-      < View style={styles.section} >
+      <View style={styles.section}>
         <Text style={styles.sectionTitle}>Today's Meals</Text>
-        {/* Daftar makanan dengan foto makanan di samping setiap item */}
         <TouchableOpacity style={styles.mealItem}>
           <View style={styles.mealImagePlaceholder} />
           <View>
@@ -58,8 +67,9 @@ export default function Calories() {
             <Text style={styles.mealCalories}>430 cal</Text>
           </View>
         </TouchableOpacity>
-        {/* Tambahkan item makanan lainnya di sini */}
-      </View >
+      </View>
+
+      {/* Calories Recap */}
       <View style={styles.section}>
         <View style={{
           padding: 10,
@@ -85,7 +95,11 @@ export default function Calories() {
         }} >
           {/* Grafik atau ilustrasi ringkasan kalori bisa ditempatkan di sini */}
           < Text style={styles.summaryTitle} >Calories for last 3 Days</Text>
-          < Text style={styles.summaryNumber} > 4,800 / 6,000</Text >
+          {activeTarget.daily ? (
+            < Text style={styles.summaryNumber} > 4,800 / {activeTarget.threeDay}</Text >
+          ) : (
+            <Text style={styles.summaryNumber}>-</Text>
+          )}
           <View style={styles.progressBar}>
             <View style={[styles.progress, { width: '80%' }]} />
           </View>
@@ -101,7 +115,11 @@ export default function Calories() {
         }} >
           {/* Grafik atau ilustrasi ringkasan kalori bisa ditempatkan di sini */}
           < Text style={styles.summaryTitle} >Calories for last 7 Days</Text>
-          < Text style={styles.summaryNumber} > 4,800 / 14,000</Text >
+          {activeTarget.daily ? (
+            < Text style={styles.summaryNumber} > 4,800 / {activeTarget.sevenDay}</Text >
+          ) : (
+            <Text style={styles.summaryNumber}>-</Text>
+          )}
           <View style={styles.progressBar}>
             <View style={[styles.progress, { width: '34%' }]} />
           </View>
@@ -109,7 +127,7 @@ export default function Calories() {
         </View >
       </View>
     </ScrollView>
-  )
+  );
 }
 const styles = StyleSheet.create({
   header: {
@@ -119,7 +137,7 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: Colors.WHITE,
     borderBottomColor: Colors.GRAY,
-    borderBottomWidth:1,
+    borderBottomWidth: 1,
   },
   headerText: {
     fontSize: 24,

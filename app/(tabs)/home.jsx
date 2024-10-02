@@ -1,24 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput, ToastAndroid, Alert } from 'react-native';
 import { Entypo, Feather, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import StartNewTargetCard from '../../components/MyTarget/StartNewTargetCard';
+import { useTarget } from '../TargetContext';
 
 const HomeScreen = () => {
-  const [userTargets, setUserTargets] = useState([]); 
+
+  const { userTarget, updateTargets } = useTarget();
+  const [userTargets, setUserTargets] = useState([]);
   const [dailyTarget, setDailyTarget] = useState('');
   const [threeDayTarget, setThreeDayTarget] = useState('');
   const [sevenDayTarget, setSevenDayTarget] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    setUserTargets(userTarget);
+  }, [userTarget]);
 
   const handleSetTarget = (daily, threeDay, sevenDay) => {
     if (!daily || !threeDay || !sevenDay) {
       Alert.alert("Error", "All fields must be filled!");
       return;
     }
-    const newTarget = { daily, threeDay, sevenDay };
-    setUserTargets([...userTargets, newTarget]);
+    const newTarget = { daily, threeDay, sevenDay, status: 'USE' };
+    const updatedTargets = [...userTargets, newTarget];
+    setUserTargets(updatedTargets);
+    updateTargets(updatedTargets); // Sync with context
     setModalVisible(false);
     setDailyTarget('');
     setThreeDayTarget('');
@@ -26,12 +35,28 @@ const HomeScreen = () => {
   };
 
   const handleRemoveTarget = (indexToRemove) => {
-    setUserTargets(userTargets.filter((_, index) => index !== indexToRemove));
+    const updatedTargets = userTargets.filter((_, index) => index !== indexToRemove);
+    setUserTargets(updatedTargets);
+    updateTargets(updatedTargets); // Sync with context
   };
 
   const closeModal = () => {
     setModalVisible(false);
   }
+
+  const handleStatusChange = (index) => {
+    const updatedTargets = userTargets.map((target, i) => {
+      if (i === index && target.status === 'USE') {
+        return { ...target, status: 'IN USE' };
+      } else if (target.status === 'IN USE') {
+        return { ...target, status: 'USE' }; // Optional: Allow toggling back to 'USE' if needed
+      }
+      return target;
+    });
+    setUserTargets(updatedTargets);
+    updateTargets(updatedTargets); // Sync with context
+  };
+
 
 
   return (
@@ -98,14 +123,30 @@ const HomeScreen = () => {
                 padding: 10,
                 width: "100%",
               }}>
-                <TouchableOpacity style={{ width: '15%', backgroundColor: "#4CAF50", borderRadius: 15, height: "40%", marginVertical: "auto", marginLeft: 8, }}>
-                  <Text style={{
-                    color: '#fff',
-                    fontSize: 15,
-                    marginHorizontal: "auto",
+                <TouchableOpacity
+                  style={{
+                    width: '15%',
+                    backgroundColor: target.status === 'IN USE' ? "#4CAF50" : "#FFA500",
+                    borderRadius: 15,
+                    height: "40%",
                     marginVertical: "auto",
-                    fontFamily: "outfit",
-                  }}>USE</Text>
+                    marginLeft: 8,
+                    opacity: target.status === 'IN USE' ? 0.6 : 1, // Mengurangi opacity untuk visual feedback
+                  }}
+                  onPress={() => target.status === 'USE' && handleStatusChange(index)}
+                  disabled={target.status === 'IN USE'}
+                >
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 15,
+                      marginHorizontal: "auto",
+                      marginVertical: "auto",
+                      fontFamily: "outfit",
+                    }}
+                  >
+                    {target.status}
+                  </Text>
                 </TouchableOpacity>
 
                 <View style={styles.nutritionItem}>
