@@ -6,27 +6,27 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import StartNewTargetCard from '../../components/MyTarget/StartNewTargetCard';
 
 const HomeScreen = () => {
-  const [userTargets, setUserTargets] = useState([]); // Array untuk menyimpan banyak target
-  const [dailyTarget, setDailyTarget] = useState(''); // Target untuk 1 hari
-  const [threeDayTarget, setThreeDayTarget] = useState(''); // Target untuk 3 hari
-  const [sevenDayTarget, setSevenDayTarget] = useState(''); // Target untuk 7 hari
-  const [isModalVisible, setModalVisible] = useState(false); // State untuk modal tambah target
+  const [userTargets, setUserTargets] = useState([]); 
+  const [dailyTarget, setDailyTarget] = useState('');
+  const [threeDayTarget, setThreeDayTarget] = useState('');
+  const [sevenDayTarget, setSevenDayTarget] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  // Function untuk menangkap data target dan menambahkan ke userTargets
   const handleSetTarget = (daily, threeDay, sevenDay) => {
-    const newTarget = { daily, threeDay, sevenDay }; // Membuat objek target baru
-
-    if (!dailyTarget || !threeDayTarget || !sevenDayTarget) {
+    if (!daily || !threeDay || !sevenDay) {
       Alert.alert("Error", "All fields must be filled!");
       return;
-    };
-    setUserTargets([...userTargets, newTarget]); // Menambahkan target baru ke array
-    setModalVisible(false); // Tutup modal setelah submit
-
+    }
+    const newTarget = { daily, threeDay, sevenDay };
+    setUserTargets([...userTargets, newTarget]);
+    setModalVisible(false);
+    setDailyTarget('');
+    setThreeDayTarget('');
+    setSevenDayTarget('');
   };
 
   const handleRemoveTarget = (indexToRemove) => {
-    setUserTargets(userTargets.filter((_, index) => index !== indexToRemove)); // Menghapus target sesuai dengan indeks
+    setUserTargets(userTargets.filter((_, index) => index !== indexToRemove));
   };
 
   const closeModal = () => {
@@ -80,69 +80,64 @@ const HomeScreen = () => {
       </View>
 
       {/* Jika userTargets masih kosong, tampilkan StartNewTargetCard */}
-      {userTargets.length === 0 && (
-        <StartNewTargetCard
-          onSubmit={(daily, threeDay, sevenDay) => handleSetTarget(daily, threeDay, sevenDay)}
-        />
-      )}
+      {userTargets.length === 0 ? (
+        <StartNewTargetCard onSubmit={handleSetTarget} />
+      ) : (
+        <>
+          {userTargets.map((target, index) => (
+            <View key={index} style={styles.section}>
+              <View style={styles.nutritionGrid}>
+                <Text style={styles.sectionTitle}>Calories Target {index + 1}</Text> {/* Menampilkan urutan target */}
+                <TouchableOpacity onPress={() => handleRemoveTarget(index)}><Feather name="trash-2" size={24} color="black" /></TouchableOpacity>
+              </View>
+              <View style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                backgroundColor: Colors.LIGHTGRAY,
+                borderRadius: 10,
+                padding: 10,
+                width: "100%",
+              }}>
+                <TouchableOpacity style={{ width: '15%', backgroundColor: "#4CAF50", borderRadius: 15, height: "40%", marginVertical: "auto", marginLeft: 8, }}>
+                  <Text style={{
+                    color: '#fff',
+                    fontSize: 15,
+                    marginHorizontal: "auto",
+                    marginVertical: "auto",
+                    fontFamily: "outfit",
+                  }}>USE</Text>
+                </TouchableOpacity>
 
-      {/* Jika sudah ada target, render setiap target dari userTargets */}
-      {userTargets.length > 0 && userTargets.map((target, index) => (
-        <View key={index} style={styles.section}>
-          <View style={styles.nutritionGrid}>
-            <Text style={styles.sectionTitle}>Calories Target {index + 1}</Text> {/* Menampilkan urutan target */}
-            <TouchableOpacity onPress={() => handleRemoveTarget(index)}><Feather name="trash-2" size={24} color="black" /></TouchableOpacity>
-          </View>
-          <View style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            backgroundColor: Colors.LIGHTGRAY,
-            borderRadius: 10,
-            padding: 10,
-            width: "100%",
-          }}>
-            <TouchableOpacity style={{ width: '15%', backgroundColor: "#4CAF50", borderRadius: 15, height: "40%", marginVertical: "auto", marginLeft: 8, }}>
-              <Text style={{
-                color: '#fff',
-                fontSize: 15,
-                marginHorizontal: "auto",
-                marginVertical: "auto",
-                fontFamily: "outfit",
-              }}>USE</Text>
-            </TouchableOpacity>
-
-            <View style={styles.nutritionItem}>
-              <Text style={styles.nutritionValue}>{target.daily} kcal</Text>
-              <Text style={styles.nutritionLabel}>1 Day</Text>
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.daily} kcal</Text>
+                  <Text style={styles.nutritionLabel}>1 Day</Text>
+                </View>
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.threeDay} kcal</Text>
+                  <Text style={styles.nutritionLabel}>3 Days</Text>
+                </View>
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.sevenDay} kcal</Text>
+                  <Text style={styles.nutritionLabel}>7 Days</Text>
+                </View>
+              </View>
             </View>
-            <View style={styles.nutritionItem}>
-              <Text style={styles.nutritionValue}>{target.threeDay} kcal</Text>
-              <Text style={styles.nutritionLabel}>3 Days</Text>
-            </View>
-            <View style={styles.nutritionItem}>
-              <Text style={styles.nutritionValue}>{target.sevenDay} kcal</Text>
-              <Text style={styles.nutritionLabel}>7 Days</Text>
-            </View>
-          </View>
-        </View>
-      ))}
-
-      {/* Tampilkan tombol untuk menambah target baru jika sudah ada target pertama */}
-      {userTargets.length > 0 && (
-        <TouchableOpacity
-          style={{
-            backgroundColor: Colors.ORANGE,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            margin: 15,
-            padding: 5,
-            borderRadius: 10,
-          }}
-          onPress={() => setModalVisible(true)}>
-          <Ionicons name="add" size={24} color="black" />
-          <Text>Add New Target</Text>
-        </TouchableOpacity>
+          ))}
+          <TouchableOpacity
+            style={{
+              backgroundColor: Colors.ORANGE,
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: 15,
+              padding: 5,
+              borderRadius: 10,
+            }}
+            onPress={() => setModalVisible(true)}>
+            <Ionicons name="add" size={24} color="black" />
+            <Text>Add New Target</Text>
+          </TouchableOpacity>
+        </>
       )}
 
       {/* Modal untuk input target baru */}
