@@ -11,19 +11,19 @@ export default function TabLayout() {
       tabBarActiveTintColor:Colors.ORANGE,
     }}>
       <Tabs.Screen name='home'
-        options={{
+        options={{ headerShown: true, 
           tabBarIcon: ({ color }) => <Ionicons name="home-outline" size={24} color={color} />,
           tabBarLabel:"Home"
         }}
       />
       <Tabs.Screen name='calories'
-        options={{
+        options={{ headerShown: true,
           tabBarIcon: ({ color }) => <Ionicons name="pie-chart-outline" size={24} color={color} />,
           tabBarLabel:"Calorie Data"
         }}
       />
       <Tabs.Screen name='profile'
-        options={{
+        options={{ headerShown: true,
           tabBarIcon: ({ color }) => <Ionicons name="person-outline" size={24} color={color} />,
           tabBarLabel:"Profile"
         }}

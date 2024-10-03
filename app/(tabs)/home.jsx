@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, TextInput, ToastAndroid, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, Alert } from 'react-native';
 import { Entypo, Feather, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import StartNewTargetCard from '../../components/MyTarget/StartNewTargetCard';
 import { useTarget } from '../TargetContext';
+import WeatherWidget from '../../components/Widget/WeatherWidget';
+import ActivitySuggestion from '../../components/Activity/ActivitySuggestion';
+
+const calorieOptions = {
+  daily: [1000, 1500, 2000, 2500],
+  threeDay: [3000, 4500, 6000, 7500],
+  sevenDay: [7000, 10500, 14000, 17500],
+};
 
 const HomeScreen = () => {
-
   const { userTarget, updateTargets } = useTarget();
   const [userTargets, setUserTargets] = useState([]);
   const [dailyTarget, setDailyTarget] = useState('');
@@ -21,13 +28,13 @@ const HomeScreen = () => {
 
   const handleSetTarget = (daily, threeDay, sevenDay) => {
     if (!daily || !threeDay || !sevenDay) {
-      Alert.alert("Error", "All fields must be filled!");
+      Alert.alert("Error", "All targets must be selected!");
       return;
     }
     const newTarget = { daily, threeDay, sevenDay, status: 'USE' };
     const updatedTargets = [...userTargets, newTarget];
     setUserTargets(updatedTargets);
-    updateTargets(updatedTargets); // Sync with context
+    updateTargets(updatedTargets);
     setModalVisible(false);
     setDailyTarget('');
     setThreeDayTarget('');
@@ -37,27 +44,35 @@ const HomeScreen = () => {
   const handleRemoveTarget = (indexToRemove) => {
     const updatedTargets = userTargets.filter((_, index) => index !== indexToRemove);
     setUserTargets(updatedTargets);
-    updateTargets(updatedTargets); // Sync with context
+    updateTargets(updatedTargets);
   };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  }
 
   const handleStatusChange = (index) => {
     const updatedTargets = userTargets.map((target, i) => {
       if (i === index && target.status === 'USE') {
         return { ...target, status: 'IN USE' };
       } else if (target.status === 'IN USE') {
-        return { ...target, status: 'USE' }; // Optional: Allow toggling back to 'USE' if needed
+        return { ...target, status: 'USE' };
       }
       return target;
     });
     setUserTargets(updatedTargets);
-    updateTargets(updatedTargets); // Sync with context
+    updateTargets(updatedTargets);
   };
 
-
+  const renderCalorieButtons = (options, setter) => (
+    <View style={styles.buttonContainer}>
+      {options.map((calories) => (
+        <TouchableOpacity
+          key={calories}
+          style={styles.calorieButton}
+          onPress={() => setter(calories.toString())}
+        >
+          <Text style={styles.calorieButtonText}>{calories}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
 
   return (
     <ScrollView style={styles.container}>
@@ -85,42 +100,47 @@ const HomeScreen = () => {
             <TouchableOpacity style={styles.calorieCard}>
               <FontAwesome5 name="baby" size={24} color="black" />
               <Text style={styles.ageGroup}>Children</Text>
-              <Text style={styles.calorieAmount}>1,200-2,000</Text>
+              <Text style={styles.calorieAmount}>1,200 - 2,000</Text>
               <Text style={styles.calorieUnit}>calories</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.calorieCard}>
               <Ionicons name="body-outline" size={24} color="#2196F3" />
               <Text style={styles.ageGroup}>Teens</Text>
-              <Text style={styles.calorieAmount}>1,800-2,600</Text>
+              <Text style={styles.calorieAmount}>1,800 - 2,600</Text>
               <Text style={styles.calorieUnit}>calories</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.calorieCard}>
               <Ionicons name="person-outline" size={24} color="#FF9800" />
               <Text style={styles.ageGroup}>Adults</Text>
-              <Text style={styles.calorieAmount}>2,000-2,500</Text>
+              <Text style={styles.calorieAmount}>2,000 - 2,500</Text>
               <Text style={styles.calorieUnit}>calories</Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
 
+      <WeatherWidget />
+      <ActivitySuggestion />
+
       {/* Jika userTargets masih kosong, tampilkan StartNewTargetCard */}
       {userTargets.length === 0 ? (
         <StartNewTargetCard onSubmit={handleSetTarget} />
       ) : (
-        <>
+        <ScrollView>
           {userTargets.map((target, index) => (
             <View key={index} style={styles.section}>
               <View style={styles.nutritionGrid}>
-                <Text style={styles.sectionTitle}>Calories Target {index + 1}</Text> {/* Menampilkan urutan target */}
-                <TouchableOpacity onPress={() => handleRemoveTarget(index)}><Feather name="trash-2" size={24} color="black" /></TouchableOpacity>
+                <Text style={styles.sectionTitle}>Calories Target {index + 1}</Text>
+                <TouchableOpacity onPress={() => handleRemoveTarget(index)}>
+                  <Feather name="trash-2" size={24} color="black" />
+                </TouchableOpacity>
               </View>
               <View style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 backgroundColor: Colors.LIGHTGRAY,
                 borderRadius: 10,
-                padding: 10,
+                padding: 5,
                 width: "100%",
               }}>
                 <TouchableOpacity
@@ -129,24 +149,20 @@ const HomeScreen = () => {
                     backgroundColor: target.status === 'IN USE' ? "#4CAF50" : "#FFA500",
                     borderRadius: 15,
                     height: "40%",
-                    marginVertical: "auto",
+                    marginVertical: "0",
                     marginLeft: 8,
                     opacity: target.status === 'IN USE' ? 0.6 : 1, // Mengurangi opacity untuk visual feedback
                   }}
                   onPress={() => target.status === 'USE' && handleStatusChange(index)}
                   disabled={target.status === 'IN USE'}
                 >
-                  <Text
-                    style={{
-                      color: '#fff',
-                      fontSize: 15,
-                      marginHorizontal: "auto",
-                      marginVertical: "auto",
-                      fontFamily: "outfit",
-                    }}
-                  >
-                    {target.status}
-                  </Text>
+                  <Text style={{
+                    color: '#fff',
+                    fontSize: 15,
+                    marginHorizontal: "auto",
+                    marginVertical: "auto",
+                    fontFamily: "outfit",
+                  }}>{target.status}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.nutritionItem}>
@@ -174,94 +190,49 @@ const HomeScreen = () => {
               padding: 5,
               borderRadius: 10,
             }}
-            onPress={() => setModalVisible(true)}>
+            onPress={() => setModalVisible(true)}
+          >
             <Ionicons name="add" size={24} color="black" />
-            <Text>Add New Target</Text>
+            <Text style={{
+              fontFamily: 'outfit'
+            }}>Add New Target</Text>
           </TouchableOpacity>
-        </>
+        </ScrollView>
       )}
 
       {/* Modal untuk input target baru */}
       <Modal
         visible={isModalVisible}
         transparent={true}
-        animationType="fade"
+        animationType="slide"
         onRequestClose={() => setModalVisible(false)}
       >
-        <View
-          style={{
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          }}
-        >
-          <View
-            style={{
-              width: 300,
-              padding: 20,
-              backgroundColor: 'white',
-              borderRadius: 10,
-            }}
-          >
-            <View style={{
-              flexDirection: 'row',
-            }}>
-              <Text style={{ fontSize: 18, fontFamily: 'outfit-medium', marginBottom: 15, marginRight: 50, }}>Set Your Calorie Targets</Text>
-              <TouchableOpacity
-                onPress={() => closeModal()}
-              ><Entypo name="cross" size={24} color="black" /></TouchableOpacity>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <View style={styles.modalHeader}>
+              <Text style={styles.modalTitle}>Set Your Calorie Targets</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)}>
+                <Entypo name="cross" size={24} color="black" />
+              </TouchableOpacity>
             </View>
 
-            <TextInput
-              placeholder="Daily Target (kcal)"
-              keyboardType="numeric"
-              value={dailyTarget}
-              onChangeText={setDailyTarget}
-              style={{
-                borderBottomWidth: 0.5,
-                marginBottom: 20,
-                padding: 5,
-                fontSize: 16,
-              }}
-            />
+            <Text style={styles.sectionTitle}>Daily Target (kcal)</Text>
+            {renderCalorieButtons(calorieOptions.daily, setDailyTarget)}
+            <Text style={styles.selectedTarget}>Selected: {dailyTarget} kcal</Text>
 
-            <TextInput
-              placeholder="3-Day Target (kcal)"
-              keyboardType="numeric"
-              value={threeDayTarget}
-              onChangeText={setThreeDayTarget}
-              style={{
-                borderBottomWidth: 1,
-                marginBottom: 20,
-                padding: 5,
-                fontSize: 16,
-              }}
-            />
+            <Text style={styles.sectionTitle}>3-Day Target (kcal)</Text>
+            {renderCalorieButtons(calorieOptions.threeDay, setThreeDayTarget)}
+            <Text style={styles.selectedTarget}>Selected: {threeDayTarget} kcal</Text>
 
-            <TextInput
-              placeholder="7-Day Target (kcal)"
-              keyboardType="numeric"
-              value={sevenDayTarget}
-              onChangeText={setSevenDayTarget}
-              style={{
-                borderBottomWidth: 1,
-                marginBottom: 20,
-                padding: 5,
-                fontSize: 16,
-              }}
-            />
+            <Text style={styles.sectionTitle}>7-Day Target (kcal)</Text>
+            {renderCalorieButtons(calorieOptions.sevenDay, setSevenDayTarget)}
+            <Text style={styles.selectedTarget}>Selected: {sevenDayTarget} kcal</Text>
 
             <TouchableOpacity
-              style={{
-                padding: 10,
-                backgroundColor: Colors.GREEN,
-                borderRadius: 15,
-                alignItems: 'center',
-              }}
+              style={styles.submitButton}
               onPress={() => handleSetTarget(dailyTarget, threeDayTarget, sevenDayTarget)}
             >
-              <Text style={{ color: Colors.WHITE, fontFamily: 'outfit-medium', fontSize: 17 }}>Submit</Text>
+              <Text style={styles.submitButtonText}>Submit</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -347,6 +318,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
+    height: "20%"
   },
   header: {
     flexDirection: 'row',
@@ -392,7 +364,7 @@ const styles = StyleSheet.create({
   },
   section: {
     backgroundColor: '#fff',
-    margin: 15,
+    margin: 5,
     padding: 20,
     borderRadius: 10,
   },
@@ -452,6 +424,85 @@ const styles = StyleSheet.create({
     color: '#666',
     fontFamily: "outfit",
     padding: 7,
+  },
+  button: {
+    padding: 10,
+    backgroundColor: Colors.GREEN,
+    borderRadius: 15,
+    paddingHorizontal: 30,
+  },
+  buttonText: {
+    color: Colors.WHITE,
+    fontFamily: "outfit-medium",
+    fontSize: 17,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    backgroundColor: Colors.WHITE,
+    margin: 20,
+    borderRadius: 20,
+    padding: 35,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 15,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontFamily: 'outfit-medium',
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontFamily: 'outfit-medium',
+    marginTop: 15,
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+  calorieButton: {
+    backgroundColor: Colors.LIGHTGRAY,
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+    width: '48%',
+    alignItems: 'center',
+  },
+  calorieButtonText: {
+    fontFamily: 'outfit',
+    fontSize: 16,
+  },
+  selectedTarget: {
+    fontFamily: 'outfit',
+    fontSize: 14,
+    color: Colors.GRAY,
+    marginTop: 5,
+    marginBottom: 15,
+  },
+  submitButton: {
+    padding: 10,
+    backgroundColor: Colors.GREEN,
+    borderRadius: 15,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  submitButtonText: {
+    color: Colors.WHITE,
+    fontFamily: 'outfit-medium',
+    fontSize: 17,
   },
 });
 
