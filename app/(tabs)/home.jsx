@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, Alert, Button } from 'react-native';
 import { Entypo, Feather, Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
@@ -7,6 +7,8 @@ import StartNewTargetCard from '../../components/MyTarget/StartNewTargetCard';
 import { useTarget } from '../TargetContext';
 import WeatherWidget from '../../components/Widget/WeatherWidget';
 import ActivitySuggestion from '../../components/Activity/ActivitySuggestion';
+import CameraComponent from '../../components/Camera/CameraComponent';
+
 
 const calorieOptions = {
   daily: [1000, 1500, 2000, 2500],
@@ -126,7 +128,7 @@ const HomeScreen = () => {
       {userTargets.length === 0 ? (
         <StartNewTargetCard onSubmit={handleSetTarget} />
       ) : (
-        <ScrollView>
+        <ScrollView style={styles.container} >
           {userTargets.map((target, index) => (
             <View key={index} style={styles.section}>
               <View style={styles.nutritionGrid}>
@@ -210,7 +212,7 @@ const HomeScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Set Your Calorie Targets</Text>
+              <Text style={styles.modalTitle}>Set Your Calorie Trgets</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
                 <Entypo name="cross" size={24} color="black" />
               </TouchableOpacity>
@@ -238,11 +240,6 @@ const HomeScreen = () => {
         </View>
       </Modal>
 
-      {/* Tombol Scan Makanan */}
-      <TouchableOpacity style={styles.scanButton}>
-        <Ionicons name="camera-outline" size={24} color="#fff" />
-        <Text style={styles.scanButtonText}>Scan Food</Text>
-      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -318,7 +315,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',
-    height: "20%"
+    height: "20%",
+    overflow:'scroll',
   },
   header: {
     flexDirection: 'row',

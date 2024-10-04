@@ -14,12 +14,18 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.carelories.foodscanner"
+      "bundleIdentifier": "com.carelories.foodscanner",
+      "infoPlist": {
+        "NSCameraUsageDescription": "This app uses the camera to scan food items."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "permissions": [
+          "CAMERA"
+        ]
       },
       "package": "com.carelories.foodscanner"
     },

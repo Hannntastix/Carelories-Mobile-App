@@ -13,7 +13,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { Colors } from '../../constants/Colors';
 
-// Fungsi untuk menghasilkan User ID acak
 const generateUserId = () => {
   return 'User-' + Math.random().toString(36).substring(2, 10);
 };
@@ -46,12 +45,12 @@ const ProfilePage = () => {
   };
 
   const handleEditBio = () => {
-    setBioInput(bio); // Set the input value to the current bio
+    setBioInput(bio); 
     setIsEditingBio(true);
   };
 
   const handleConfirmBio = () => {
-    setBio(bioInput); // Update bio with the new input
+    setBio(bioInput);
     setIsEditingBio(false);
     Alert.alert('Success', 'Bio updated successfully!');
   };
@@ -69,7 +68,7 @@ const ProfilePage = () => {
 
       {/* Profile Picture */}
       <View style={styles.profilePictureContainer}>
-        <TouchableOpacity onPress={handleImagePicker}>
+        <View>
           <Image
             source={{
               uri: profileImage
@@ -78,7 +77,7 @@ const ProfilePage = () => {
             }}
             style={styles.profilePicture}
           />
-        </TouchableOpacity>
+        </View>
       </View>
 
       {/* User ID Section */}
