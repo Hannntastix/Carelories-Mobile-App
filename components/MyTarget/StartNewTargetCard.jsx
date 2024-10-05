@@ -88,11 +88,12 @@ export default function StartNewTargetCard({ onSubmit }) {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
-        marginTop: 50,
+        marginTop: 30,
         alignItems: "center",
         marginHorizontal: 15,
         borderRadius: 15,
         backgroundColor: Colors.WHITE,
+        marginBottom:50,
     },
     title: {
         fontSize: 25,

@@ -7,7 +7,6 @@ import StartNewTargetCard from '../../components/MyTarget/StartNewTargetCard';
 import { useTarget } from '../TargetContext';
 import WeatherWidget from '../../components/Widget/WeatherWidget';
 import ActivitySuggestion from '../../components/Activity/ActivitySuggestion';
-import CameraComponent from '../../components/Camera/CameraComponent';
 
 
 const calorieOptions = {
@@ -99,36 +98,43 @@ const HomeScreen = () => {
         <View style={styles.idealCalorieContainer}>
           <Text style={styles.idealCalorieTitle}>Ideal Daily Calorie Intake</Text>
           <View style={styles.calorieCardContainer}>
-            <TouchableOpacity style={styles.calorieCard}>
+            <View style={styles.calorieCard}>
               <FontAwesome5 name="baby" size={24} color="black" />
               <Text style={styles.ageGroup}>Children</Text>
               <Text style={styles.calorieAmount}>1,200 - 2,000</Text>
               <Text style={styles.calorieUnit}>calories</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.calorieCard}>
+            </View>
+            <View style={styles.calorieCard}>
               <Ionicons name="body-outline" size={24} color="#2196F3" />
               <Text style={styles.ageGroup}>Teens</Text>
               <Text style={styles.calorieAmount}>1,800 - 2,600</Text>
               <Text style={styles.calorieUnit}>calories</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.calorieCard}>
+            </View>
+            <View style={styles.calorieCard}>
               <Ionicons name="person-outline" size={24} color="#FF9800" />
               <Text style={styles.ageGroup}>Adults</Text>
               <Text style={styles.calorieAmount}>2,000 - 2,500</Text>
               <Text style={styles.calorieUnit}>calories</Text>
-            </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
 
-      <WeatherWidget />
+      <WeatherWidget city="Jakarta" />
+
       <ActivitySuggestion />
 
       {/* Jika userTargets masih kosong, tampilkan StartNewTargetCard */}
       {userTargets.length === 0 ? (
         <StartNewTargetCard onSubmit={handleSetTarget} />
       ) : (
-        <ScrollView style={styles.container} >
+        <ScrollView style={{
+          flex: 1,
+          backgroundColor: '#f5f5f5',
+          height: "20%",
+          overflow: 'scroll',
+          marginBottom:40,
+        }} >
           {userTargets.map((target, index) => (
             <View key={index} style={styles.section}>
               <View style={styles.nutritionGrid}>
@@ -153,7 +159,7 @@ const HomeScreen = () => {
                     height: "40%",
                     marginVertical: "0",
                     marginLeft: 8,
-                    opacity: target.status === 'IN USE' ? 0.6 : 1, // Mengurangi opacity untuk visual feedback
+                    opacity: target.status === 'IN USE' ? 0.6 : 1,
                   }}
                   onPress={() => target.status === 'USE' && handleStatusChange(index)}
                   disabled={target.status === 'IN USE'}
@@ -316,7 +322,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
     height: "20%",
-    overflow:'scroll',
+    overflow: 'scroll',
   },
   header: {
     flexDirection: 'row',

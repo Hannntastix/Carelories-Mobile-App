@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, ToastAndroid } from 'react-native'
+import { View, Text, TextInput, StyleSheet, ToastAndroid, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
 import { Colors } from "../../../constants/Colors"
@@ -19,7 +19,7 @@ export default function SignIn() {
 
     const onSignIn = () => {
         if (!email || !password) {
-            ToastAndroid.show("Please Enter Email and Password First", ToastAndroid.LONG);
+            Alert.alert("Error", "Please Fill The Form First");
             return;
         }
 
@@ -95,11 +95,12 @@ const styles = StyleSheet.create({
         fontFamily: "outfit-bold",
         fontSize: 30,
         marginTop: 30,
+        color: Colors.ORANGE,
     },
     subtitle: {
         fontFamily: "outfit-bold",
         fontSize: 30,
-        color: Colors.GRAY,
+        color: Colors.DARKORANGE,
         marginTop: 10,
     },
     inputContainer: {
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
     },
     signInButton: {
         padding: 15,
-        backgroundColor: Colors.PRIMARY,
+        backgroundColor: Colors.ORANGE,
         borderRadius: 15,
         marginTop: 50,
     },

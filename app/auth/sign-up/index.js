@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, ToastAndroid } from 'react-native'
+import { View, Text, TextInput, StyleSheet, ToastAndroid, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { useNavigation, useRouter } from 'expo-router'
 import { Colors } from '../../../constants/Colors';
@@ -33,7 +33,7 @@ export default function SignUp() {
 
     const onCreateAccount = () => {
         if (!email || !password || !fullName) {
-            ToastAndroid.show("Please complete all details", ToastAndroid.LONG);
+            Alert.alert("Error", "Please Complete All The Details");
             return;
         }
 
@@ -68,6 +68,8 @@ export default function SignUp() {
                 fontFamily: "outfit-bold",
                 fontSize: 30,
                 marginTop: 30,
+                color:Colors.ORANGE,
+                textAlign:"center",
             }}>Create New Account</Text>
 
             {/* User FullName */}
@@ -125,14 +127,14 @@ export default function SignUp() {
                 onPress={onCreateAccount}
                 style={{
                     padding: 15,
-                    backgroundColor: Colors.PRIMARY,
+                    backgroundColor:Colors.ORANGE,
                     borderRadius: 15,
                     marginTop: 50,
                 }}
             >
                 <Text style={{
                     color: Colors.WHITE,
-                    textAlign: "center"
+                    textAlign: "center",
                 }}>Create Account</Text>
             </TouchableOpacity>
         </View>

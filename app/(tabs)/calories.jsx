@@ -1,14 +1,33 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Colors } from '../../constants/Colors';
 import { useTarget } from '../TargetContext';
 import StartNewTargetCard from '../../components/MyTarget/StartNewTargetCard';
 import { useState } from 'react';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 export default function Calories() {
   const { getActiveTarget } = useTarget();
   const activeTarget = getActiveTarget() || {};
+  const [scannedFoods, setScannedFoods] = useState([]);
+  const navigation = useNavigation();
+  const route = useRoute();
+
+  useEffect(() => {
+    if (route.params?.scannedFood) {
+      const newFood = {
+        ...route.params.scannedFood,
+        time: new Date().toLocaleString(),
+      };
+      setScannedFoods(prevFoods => [...prevFoods, newFood]);
+    }
+  }, [route.params?.scannedFood]);
+
+  const totalCalories = scannedFoods.reduce((sum, food) => sum + (parseInt(food.calories) || 0), 0);
+  const progress = activeTarget.daily ? (totalCalories / activeTarget.daily) * 100 : 0;
+  const progress2 = activeTarget.threeDay ? (totalCalories / activeTarget.threeDay) * 100 : 0;
+  const progress3 = activeTarget.sevenDay ? (totalCalories / activeTarget.sevenDay) * 100 : 0;
 
   return (
     <ScrollView style={styles.container}>
@@ -23,50 +42,35 @@ export default function Calories() {
             }}
           />
         </TouchableOpacity>
-        {/* Foto profil pengguna bisa ditempatkan di sini */}
       </View>
 
       {/* Ringkasan Kalori */}
       <View style={styles.caloriesSummary}>
         <Text style={styles.summaryTitle}>Today's Calories</Text>
         {activeTarget.daily ? (
-          <Text style={styles.summaryNumber}>1,200 / {activeTarget.daily}</Text>
+          <Text style={styles.summaryNumber}>{totalCalories} kcal / {activeTarget.daily}</Text>
         ) : (
           <Text style={styles.summaryNumber}>-</Text>
         )}
         <View style={styles.progressBar}>
-          <View style={[styles.progress, { width: '60%' }]} />
+          <View style={[styles.progress, { width: `${Math.min(progress, 100)}%` }]} />
         </View>
-        <Text style={styles.summaryTitle}>Progress : 60%</Text>
+        <Text style={styles.summaryTitle}>Progress : {progress.toFixed(1)}%</Text>
       </View>
 
       {/* Makanan Hari Ini */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Today's Meals</Text>
-        <TouchableOpacity style={styles.mealItem}>
-          <View style={styles.mealImagePlaceholder} />
-          <View>
-            <Text style={styles.mealName}>Fried Rice</Text>
-            <Text style={styles.mealTime}>08:53 29/09/2024</Text>
-            <Text style={styles.mealCalories}>220 cal</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.mealItem}>
-          <View style={styles.mealImagePlaceholder} />
-          <View>
-            <Text style={styles.mealName}>Carbonara</Text>
-            <Text style={styles.mealTime}>13:34 29/09/2024</Text>
-            <Text style={styles.mealCalories}>550 cal</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.mealItem}>
-          <View style={styles.mealImagePlaceholder} />
-          <View>
-            <Text style={styles.mealName}>Cream Soup</Text>
-            <Text style={styles.mealTime}>19:23 29/09/2024</Text>
-            <Text style={styles.mealCalories}>430 cal</Text>
-          </View>
-        </TouchableOpacity>
+        {scannedFoods.map((food, index) => (
+          <TouchableOpacity key={index} style={styles.mealItem}>
+            <View style={styles.mealImagePlaceholder} />
+            <View>
+              <Text style={styles.mealName}>{food.name}</Text>
+              <Text style={styles.mealTime}>{food.time}</Text>
+              <Text style={styles.mealCalories}>{food.calories} cal</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
       </View>
 
       {/* Calories Recap */}
@@ -96,14 +100,14 @@ export default function Calories() {
           {/* Grafik atau ilustrasi ringkasan kalori bisa ditempatkan di sini */}
           < Text style={styles.summaryTitle} >Calories for last 3 Days</Text>
           {activeTarget.daily ? (
-            < Text style={styles.summaryNumber} > 4,800 / {activeTarget.threeDay}</Text >
+            <Text style={styles.summaryNumber}>{totalCalories} kcal / {activeTarget.threeDay}</Text>
           ) : (
             <Text style={styles.summaryNumber}>-</Text>
           )}
           <View style={styles.progressBar}>
-            <View style={[styles.progress, { width: '80%' }]} />
+            <View style={[styles.progress, { width: `${Math.min(progress2, 100)}%` }]} />
           </View>
-          < Text style={styles.summaryTitle} >Progress : 80%</Text>
+          <Text style={styles.summaryTitle}>Progress : {progress2.toFixed(1)}%</Text>
         </View >
         < View style={{
           backgroundColor: Colors.ORANGE,
@@ -116,14 +120,14 @@ export default function Calories() {
           {/* Grafik atau ilustrasi ringkasan kalori bisa ditempatkan di sini */}
           < Text style={styles.summaryTitle} >Calories for last 7 Days</Text>
           {activeTarget.daily ? (
-            < Text style={styles.summaryNumber} > 4,800 / {activeTarget.sevenDay}</Text >
+            <Text style={styles.summaryNumber}>{totalCalories} kcal / {activeTarget.sevenDay}</Text>
           ) : (
             <Text style={styles.summaryNumber}>-</Text>
           )}
           <View style={styles.progressBar}>
-            <View style={[styles.progress, { width: '34%' }]} />
+            <View style={[styles.progress, { width: `${Math.min(progress3, 100)}%` }]} />
           </View>
-          < Text style={styles.summaryTitle} >Progress : 34,28%</Text>
+          <Text style={styles.summaryTitle}>Progress : {progress3.toFixed(1)}%</Text>
         </View >
       </View>
     </ScrollView>
