@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView, SafeAreaView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView, SafeAreaView, StyleSheet, Alert } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
 

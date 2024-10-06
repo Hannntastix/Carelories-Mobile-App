@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect } from 'react'
 import { Colors } from '../../constants/Colors';
@@ -19,10 +19,30 @@ export default function Calories() {
       const newFood = {
         ...route.params.scannedFood,
         time: new Date().toLocaleString(),
+        id: Date.now(), // Add a unique id for each food item
       };
       setScannedFoods(prevFoods => [...prevFoods, newFood]);
     }
   }, [route.params?.scannedFood]);
+
+  const deleteMeal = (id) => {
+    Alert.alert(
+      "Delete Meal",
+      "Are you sure you want to delete this meal?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            setScannedFoods(prevFoods => prevFoods.filter(food => food.id !== id));
+          }
+        }
+      ]
+    );
+  };
 
   const totalCalories = scannedFoods.reduce((sum, food) => sum + (parseInt(food.calories) || 0), 0);
   const progress = activeTarget.daily ? (totalCalories / activeTarget.daily) * 100 : 0;
@@ -61,15 +81,23 @@ export default function Calories() {
       {/* Makanan Hari Ini */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Today's Meals</Text>
-        {scannedFoods.map((food, index) => (
-          <TouchableOpacity key={index} style={styles.mealItem}>
-            <View style={styles.mealImagePlaceholder} />
-            <View>
-              <Text style={styles.mealName}>{food.name}</Text>
-              <Text style={styles.mealTime}>{food.time}</Text>
-              <Text style={styles.mealCalories}>{food.calories} cal</Text>
-            </View>
-          </TouchableOpacity>
+        {scannedFoods.map((food) => (
+          <View key={food.id} style={styles.mealItemContainer}>
+            <TouchableOpacity style={styles.mealItem}>
+              <View style={styles.mealImagePlaceholder} />
+              <View>
+                <Text style={styles.mealName}>{food.name}</Text>
+                <Text style={styles.mealTime}>{food.time}</Text>
+                <Text style={styles.mealCalories}>{food.calories} cal</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.deleteButton}
+              onPress={() => deleteMeal(food.id)}
+            >
+              <Ionicons name="trash-outline" size={24} color={Colors.RED} />
+            </TouchableOpacity>
+          </View>
         ))}
       </View>
 
@@ -133,7 +161,25 @@ export default function Calories() {
     </ScrollView>
   );
 }
+
 const styles = StyleSheet.create({
+  // ... (keep existing styles)
+
+  mealItemContainer: {
+    alignItems: 'center',
+    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  mealItem: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  deleteButton: {
+    padding: 10,
+    marginBottom:"auto"
+  },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',

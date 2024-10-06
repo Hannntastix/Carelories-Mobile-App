@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Carelories_Project",
-    "slug": "Carelories_Project",
+    "slug": "careloriesapplication",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -42,7 +42,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "314e480a-a0bd-477b-822b-3e3369af28fd"
+        "projectId": "694d1df8-68f0-4c5c-bd63-8f0ee1f8b039"
       }
     },
     "runtimeVersion": {
@@ -50,6 +50,7 @@
     },
     "updates": {
       "url": "https://u.expo.dev/314e480a-a0bd-477b-822b-3e3369af28fd"
-    }
+    },
+    "owner": "athalah12"
   }
 }

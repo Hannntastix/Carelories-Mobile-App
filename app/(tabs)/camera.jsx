@@ -6,7 +6,7 @@ import { Colors } from '../../constants/Colors';
 import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
 
-const API_KEY = 'sSMAS2Kp.WQT0QR4caVp4gqMzLPGb3mPNbqZ4VYuA';
+const API_KEY = 'Vh6kUHax.AhfMWCq9CBJd6f7UNVG6BLmdR8yK5paN';
 const API_URL = 'https://vision.foodvisor.io/api/1.0/en/analysis/';
 
 const NUTRITIONIX_APP_ID = 'b174b922';
@@ -138,9 +138,9 @@ export default function CameraComponent() {
             >
                 <Text style={styles.headerText}>Scan Your Food</Text>
                 <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+                    {/* <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
                         <MaterialCommunityIcons name="camera-flip-outline" size={50} color="white" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity style={styles.button} onPress={takePicture} disabled={isAnalyzing}>
                         <MaterialCommunityIcons name="camera" size={50} color={isAnalyzing ? "gray" : "white"} />
                     </TouchableOpacity>
@@ -195,10 +195,15 @@ const styles = StyleSheet.create({
         margin: 64,
     },
     button: {
-        flex: 1,
+        flex: 0,
+        padding:10,
+        marginHorizontal:"auto",
         alignSelf: 'flex-end',
         alignItems: 'center',
-        marginBottom: 80,
+        marginBottom: 87,
+        borderWidth:1,
+        borderColor:"white",
+        borderRadius:100,
     },
     headerText: {
         backgroundColor: 'transparent',
@@ -207,6 +212,7 @@ const styles = StyleSheet.create({
         fontSize: 35,
         color: Colors.ORANGE,
         marginTop: 40,
+        marginHorizontal: "auto",
     },
     analyzingOverlay: {
         ...StyleSheet.absoluteFillObject,

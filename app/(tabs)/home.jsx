@@ -74,66 +74,49 @@ const HomeScreen = () => {
       ))}
     </View>
   );
+  const renderAddButton = () => {
+    if (userTargets.length >= 3) {
+      return (
+        <Text
+        style={{
+          fontFamily:"outfit-bold",
+          textAlign:"center",
+          fontSize:15,
+          marginTop:40,
+        }}
+        >(The maximum amount of the target has been reached)</Text>
+      )
+    }
 
-  return (
-    <ScrollView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Carelories</Text>
-        <Image
-          source={require('./../../assets/images/login.jpeg')}
-          style={{ width: 50, height: 30 }}
-        />
-      </View>
+    return (
+      <TouchableOpacity
+        style={{
+          backgroundColor: Colors.ORANGE,
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'center',
+          margin: 15,
+          padding: 5,
+          borderRadius: 10,
+        }}
+        onPress={() => setModalVisible(true)}
+      >
+        <Ionicons name="add" size={24} color="black" />
+        <Text style={{
+          fontFamily: 'outfit',
+        }}>Add New Target</Text>
+      </TouchableOpacity>
+    );
+  };
 
-      {/* Greeting and Ideal Calorie Section */}
-      <View style={styles.greetingSection}>
-        <Text style={styles.greetingText}>
-          Hello, <Text style={styles.userName}>Carelorians</Text>!
-        </Text>
-        <Text style={styles.greetingSubtext}>
-          Ready to track your calories journey?
-        </Text>
-
-        <View style={styles.idealCalorieContainer}>
-          <Text style={styles.idealCalorieTitle}>Ideal Daily Calorie Intake</Text>
-          <View style={styles.calorieCardContainer}>
-            <View style={styles.calorieCard}>
-              <FontAwesome5 name="baby" size={24} color="black" />
-              <Text style={styles.ageGroup}>Children</Text>
-              <Text style={styles.calorieAmount}>1,200 - 2,000</Text>
-              <Text style={styles.calorieUnit}>calories</Text>
-            </View>
-            <View style={styles.calorieCard}>
-              <Ionicons name="body-outline" size={24} color="#2196F3" />
-              <Text style={styles.ageGroup}>Teens</Text>
-              <Text style={styles.calorieAmount}>1,800 - 2,600</Text>
-              <Text style={styles.calorieUnit}>calories</Text>
-            </View>
-            <View style={styles.calorieCard}>
-              <Ionicons name="person-outline" size={24} color="#FF9800" />
-              <Text style={styles.ageGroup}>Adults</Text>
-              <Text style={styles.calorieAmount}>2,000 - 2,500</Text>
-              <Text style={styles.calorieUnit}>calories</Text>
-            </View>
-          </View>
-        </View>
-      </View>
-
-      <WeatherWidget city="Jakarta" />
-
-      <ActivitySuggestion />
-
-      {/* Jika userTargets masih kosong, tampilkan StartNewTargetCard */}
-      {userTargets.length === 0 ? (
-        <StartNewTargetCard onSubmit={handleSetTarget} />
-      ) : (
+  const renderSection = () => {
+    if (userTargets.length === 1) {
+      return (
         <ScrollView style={{
           flex: 1,
           backgroundColor: '#f5f5f5',
-          height: "20%",
           overflow: 'scroll',
-          marginBottom:40,
+          marginBottom: 40,
         }} >
           {userTargets.map((target, index) => (
             <View key={index} style={styles.section}>
@@ -188,24 +171,196 @@ const HomeScreen = () => {
               </View>
             </View>
           ))}
-          <TouchableOpacity
-            style={{
-              backgroundColor: Colors.ORANGE,
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: 15,
-              padding: 5,
-              borderRadius: 10,
-            }}
-            onPress={() => setModalVisible(true)}
-          >
-            <Ionicons name="add" size={24} color="black" />
-            <Text style={{
-              fontFamily: 'outfit'
-            }}>Add New Target</Text>
-          </TouchableOpacity>
+          {renderAddButton()}
         </ScrollView>
+      )
+    } else if (userTargets.length === 2) {
+      return (
+        <ScrollView style={{
+          flex: 1,
+          backgroundColor: '#f5f5f5',
+          overflow: 'scroll',
+          marginBottom: 40,
+          height: 550,
+        }} >
+          {userTargets.map((target, index) => (
+            <View key={index} style={styles.section}>
+              <View style={styles.nutritionGrid}>
+                <Text style={styles.sectionTitle}>Calories Target {index + 1}</Text>
+                <TouchableOpacity onPress={() => handleRemoveTarget(index)}>
+                  <Feather name="trash-2" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+              <View style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                backgroundColor: Colors.LIGHTGRAY,
+                borderRadius: 10,
+                padding: 5,
+                width: "100%",
+              }}>
+                <TouchableOpacity
+                  style={{
+                    width: '15%',
+                    backgroundColor: target.status === 'IN USE' ? "#4CAF50" : "#FFA500",
+                    borderRadius: 15,
+                    height: "40%",
+                    marginVertical: "0",
+                    marginLeft: 8,
+                    opacity: target.status === 'IN USE' ? 0.6 : 1,
+                  }}
+                  onPress={() => target.status === 'USE' && handleStatusChange(index)}
+                  disabled={target.status === 'IN USE'}
+                >
+                  <Text style={{
+                    color: '#fff',
+                    fontSize: 15,
+                    marginHorizontal: "auto",
+                    marginVertical: "auto",
+                    fontFamily: "outfit",
+                  }}>{target.status}</Text>
+                </TouchableOpacity>
+
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.daily} kcal</Text>
+                  <Text style={styles.nutritionLabel}>1 Day</Text>
+                </View>
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.threeDay} kcal</Text>
+                  <Text style={styles.nutritionLabel}>3 Days</Text>
+                </View>
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.sevenDay} kcal</Text>
+                  <Text style={styles.nutritionLabel}>7 Days</Text>
+                </View>
+              </View>
+            </View>
+          ))}
+          {renderAddButton()}
+        </ScrollView>
+      )
+    } else if (userTargets.length > 2) {
+      return (
+        <ScrollView style={{
+          flex: 1,
+          backgroundColor: '#f5f5f5',
+          overflow: 'scroll',
+          marginBottom: 40,
+          height: 1000,
+        }} >
+          {userTargets.map((target, index) => (
+            <View key={index} style={styles.section}>
+              <View style={styles.nutritionGrid}>
+                <Text style={styles.sectionTitle}>Calories Target {index + 1}</Text>
+                <TouchableOpacity onPress={() => handleRemoveTarget(index)}>
+                  <Feather name="trash-2" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
+              <View style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                backgroundColor: Colors.LIGHTGRAY,
+                borderRadius: 10,
+                padding: 5,
+                width: "100%",
+              }}>
+                <TouchableOpacity
+                  style={{
+                    width: '15%',
+                    backgroundColor: target.status === 'IN USE' ? "#4CAF50" : "#FFA500",
+                    borderRadius: 15,
+                    height: "40%",
+                    marginVertical: "0",
+                    marginLeft: 8,
+                    opacity: target.status === 'IN USE' ? 0.6 : 1,
+                  }}
+                  onPress={() => target.status === 'USE' && handleStatusChange(index)}
+                  disabled={target.status === 'IN USE'}
+                >
+                  <Text style={{
+                    color: '#fff',
+                    fontSize: 15,
+                    marginHorizontal: "auto",
+                    marginVertical: "auto",
+                    fontFamily: "outfit",
+                  }}>{target.status}</Text>
+                </TouchableOpacity>
+
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.daily} kcal</Text>
+                  <Text style={styles.nutritionLabel}>1 Day</Text>
+                </View>
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.threeDay} kcal</Text>
+                  <Text style={styles.nutritionLabel}>3 Days</Text>
+                </View>
+                <View style={styles.nutritionItem}>
+                  <Text style={styles.nutritionValue}>{target.sevenDay} kcal</Text>
+                  <Text style={styles.nutritionLabel}>7 Days</Text>
+                </View>
+              </View>
+            </View>
+          ))}
+          {renderAddButton()}
+        </ScrollView>
+      )
+    }
+  }
+
+  return (
+    <ScrollView style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Carelories</Text>
+        <Image
+          source={require('./../../assets/images/login.jpeg')}
+          style={{ width: 50, height: 30 }}
+        />
+      </View>
+
+      {/* Greeting and Ideal Calorie Section */}
+      <View style={styles.greetingSection}>
+        <Text style={styles.greetingText}>
+          Hello, <Text style={styles.userName}>Carelorians</Text>!
+        </Text>
+        <Text style={styles.greetingSubtext}>
+          Ready to track your calories journey?
+        </Text>
+
+        <View style={styles.idealCalorieContainer}>
+          <Text style={styles.idealCalorieTitle}>Ideal Daily Calorie Intake</Text>
+          <View style={styles.calorieCardContainer}>
+            <View style={styles.calorieCard}>
+              <FontAwesome5 name="baby" size={24} color="black" />
+              <Text style={styles.ageGroup}>Children</Text>
+              <Text style={styles.calorieAmount}>1,200 - 2,000</Text>
+              <Text style={styles.calorieUnit}>calories</Text>
+            </View>
+            <View style={styles.calorieCard}>
+              <Ionicons name="body-outline" size={24} color="#2196F3" />
+              <Text style={styles.ageGroup}>Teens</Text>
+              <Text style={styles.calorieAmount}>1,800 - 2,600</Text>
+              <Text style={styles.calorieUnit}>calories</Text>
+            </View>
+            <View style={styles.calorieCard}>
+              <Ionicons name="person-outline" size={24} color="#FF9800" />
+              <Text style={styles.ageGroup}>Adults</Text>
+              <Text style={styles.calorieAmount}>2,000 - 2,500</Text>
+              <Text style={styles.calorieUnit}>calories</Text>
+            </View>
+          </View>
+        </View>
+      </View>
+
+      <WeatherWidget city="Jakarta" />
+
+      <ActivitySuggestion />
+
+      {/* Jika userTargets masih kosong, tampilkan StartNewTargetCard */}
+      {userTargets.length === 0 ? (
+        <StartNewTargetCard onSubmit={handleSetTarget} />
+      ) : (
+        renderSection()
       )}
 
       {/* Modal untuk input target baru */}
@@ -218,7 +373,7 @@ const HomeScreen = () => {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Set Your Calorie Trgets</Text>
+              <Text style={styles.modalTitle}>Set Your Calorie Targets</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
                 <Entypo name="cross" size={24} color="black" />
               </TouchableOpacity>
@@ -371,11 +526,12 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 20,
     borderRadius: 10,
+    maxHeight: "100%"
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 15,
+    marginBottom: 0,
     fontFamily: "outfit",
   },
   mealItem: {
