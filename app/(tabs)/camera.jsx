@@ -6,7 +6,7 @@ import { Colors } from '../../constants/Colors';
 import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
 
-const API_KEY = 'Vh6kUHax.AhfMWCq9CBJd6f7UNVG6BLmdR8yK5paN';
+const API_KEY = 'QnfbtxAH.mmdEOJcmiwCwXp04bKORaLny12P6T16f';
 const API_URL = 'https://vision.foodvisor.io/api/1.0/en/analysis/';
 
 const NUTRITIONIX_APP_ID = 'b174b922';
@@ -196,14 +196,14 @@ const styles = StyleSheet.create({
     },
     button: {
         flex: 0,
-        padding:10,
-        marginHorizontal:"auto",
+        padding: 10,
+        marginHorizontal: "auto",
         alignSelf: 'flex-end',
         alignItems: 'center',
         marginBottom: 87,
-        borderWidth:1,
-        borderColor:"white",
-        borderRadius:100,
+        borderWidth: 1,
+        borderColor: "white",
+        borderRadius: 100,
     },
     headerText: {
         backgroundColor: 'transparent',
