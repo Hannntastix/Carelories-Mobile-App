@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text , Stylesheet} from 'react-native'
 import React from 'react'
 import { Tabs } from 'expo-router'
 import { Ionicons } from '@expo/vector-icons'
@@ -42,3 +42,9 @@ export default function TabLayout() {
     </Tabs>
   )
 }
+
+// const styles = StyleSheet.create({
+//   tabBarIcon : {
+//     flexDirection: "column"
+//   }
+// })

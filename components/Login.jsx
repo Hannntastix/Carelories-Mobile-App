@@ -7,7 +7,7 @@ export default function Login() {
 
     const router = useRouter();
 
-    return (
+    return ( 
         <ScrollView style={styles.mainContainer}>
             <Image source={require('./../assets/images/login.jpeg')}
                 style={{

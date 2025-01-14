@@ -10,7 +10,7 @@ export default function RootLayout() {
   });
 
   if (!fontsLoaded) {
-    return null; // atau komponen loading
+    return null;
   }
 
   return (

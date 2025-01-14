@@ -6,7 +6,7 @@ import { Colors } from '../../constants/Colors';
 import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
 
-const API_KEY = 'QnfbtxAH.mmdEOJcmiwCwXp04bKORaLny12P6T16f';
+const API_KEY = 'YdeZ6x1W.OlTXDTytr8tetZuv279doHz3zRP6Pl44';
 const API_URL = 'https://vision.foodvisor.io/api/1.0/en/analysis/';
 
 const NUTRITIONIX_APP_ID = 'b174b922';
