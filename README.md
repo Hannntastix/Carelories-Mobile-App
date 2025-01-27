@@ -1,50 +1,60 @@
-# Welcome to your Expo app 👋
+# 🍎 Carelories Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Selamat datang di repositori **Carelories Mobile App**! 🎉  
+Aplikasi ini dirancang untuk membantu pengguna mendeteksi jumlah kalori dalam makanan mereka melalui fitur *food scan* berbasis *deep learning* menggunakan metode CNN. Selain itu, aplikasi ini juga memungkinkan pengguna untuk menetapkan target kalori harian mereka demi mencapai pola makan yang lebih sehat. Aplikasi ini dibangun menggunakan **React Native (Expo)**, **Firebase**, dan **Python** untuk mendukung pengalaman pengguna yang interaktif dan akurat.
 
-## Get started
+## 🚀 Teknologi yang Digunakan
 
-1. Install dependencies
+- **React Native (Expo)**: Framework untuk membangun aplikasi mobile yang cepat, lintas platform, dan responsif.
+- **Firebase**: Backend *as-a-service* untuk autentikasi pengguna, penyimpanan data, dan analitik aplikasi.
+- **Python**: Bahasa pemrograman yang digunakan untuk mengimplementasikan model *deep learning* dengan metode CNN.
+- **TensorFlow/PyTorch**: *Framework* *deep learning* untuk melatih dan menjalankan model deteksi kalori makanan.
 
-   ```bash
-   npm install
-   ```
+## ✨ Fitur Utama
 
-2. Start the app
+### 🎯 Fitur Pengguna
+- **Food Scan**: Deteksi jumlah kalori dalam makanan menggunakan kamera dan model CNN.
+- **Target Kalori Harian**: Tetapkan target kalori sesuai kebutuhan tubuh dan pantau pencapaiannya.
+- **Riwayat Kalori**: Lihat log makanan dan kalori yang telah dikonsumsi.
+- **Profil Nutrisi**: Informasi lengkap tentang gizi dari makanan yang discan.
 
-   ```bash
-    npx expo start
-   ```
+### 🔒 Sistem Autentikasi
+- Login dan registrasi yang aman menggunakan **Firebase Authentication**.
+- Mendukung login dengan email/password dan metode lainnya.
 
-In the output, you'll find options to open the app in a
+### 📊 Pelacakan Progres
+- Statistik konsumsi kalori harian, mingguan, dan bulanan.
+- Pengingat dan notifikasi untuk membantu pengguna tetap pada jalur diet yang sehat.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 📸 Dokumentasi Tampilan Aplikasi
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+| Halaman Utama | Food Scan |
+| ------------- | --------- |
+| ![Home](./assets/images/Home.jpg) | ![Food Scan](./assets/images/Scan.jpg) |
 
-## Get a fresh project
+## 🛠️ Fitur yang Akan Datang
 
-When you're ready, run:
+- **Fitur Resep Sehat**: Saran resep makanan berdasarkan kebutuhan kalori pengguna.
+- **Integrasi Smartwatch**: Sinkronisasi data dengan perangkat wearable untuk pelacakan yang lebih akurat.
+- **Forum Diskusi**: Tempat untuk berbagi tips dan motivasi di antara pengguna.
 
-```bash
-npm run reset-project
-```
+## 🤝 Kontribusi
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Kami terbuka untuk kontribusi!  
+Jika Anda ingin berkontribusi, silakan fork repositori ini, buat branch baru, dan buat pull request.  
+Kontribusi Anda akan kami tinjau secepat mungkin.
 
-## Learn more
+## 📄 Lisensi
 
-To learn more about developing your project with Expo, look at the following resources:
+Proyek ini dilisensikan di bawah [MIT License](./LICENSE).
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 📞 Kontak
 
-## Join the community
+Jika Anda memiliki pertanyaan atau masukan mengenai proyek ini, silakan hubungi kami di:
 
-Join our community of developers creating universal apps.
+Instagram: @m.raihanathalah  
+Email: rehan121203@gmail.com  
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+Terima kasih telah mengunjungi proyek ini! Kami berharap **Carelories Mobile App** dapat membantu Anda mencapai pola makan yang lebih sehat dan seimbang. 🚀
